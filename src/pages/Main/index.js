@@ -1,5 +1,6 @@
 import { React, useState, useCallback, useEffect } from 'react';
 import { FaGithub, FaPlus, FaSpinner, FaBars, FaTrash } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 import { Container, Form, SubmitButton, List, DeleteButton } from './styles';
 
@@ -13,17 +14,21 @@ export default function Main() {
     const [alert, setAlert] = useState(null);
 
     
-    useEffect(() => {
-        const repoStorage = localStorage.getItem('repos');
-        if(repoStorage) {
-            setRepositorios(JSON.parse(repoStorage));
-        }
-    }, []);
-    
-    useEffect(() => {
-        console.log('Vai salvar o repositório ' + JSON.stringify(repositorios));
-        localStorage.setItem('repos', JSON.stringify(repositorios));
-    }, [repositorios]);
+   // Buscar
+   useEffect(()=>{
+    const repoStorage = localStorage.getItem('repos');
+
+    if(repoStorage){
+      setRepositorios(JSON.parse(repoStorage));
+    }
+
+  }, []);
+
+  
+  // Salvar alterações
+  useEffect(()=>{
+    localStorage.setItem('repos', JSON.stringify(repositorios));
+  }, [repositorios]);
 
     function handleInputChange(e) {
         setNewRepo(e.target.value);
@@ -104,9 +109,9 @@ export default function Main() {
                             </DeleteButton>
                             {repo.name}
                         </span>
-                        <a href="">
+                        <Link to={`/repositorio/${encodeURIComponent(repo.name)}`}>
                             <FaBars size={20}/>
-                        </a>
+                        </Link>
                     </li>
                 ))}
             </List>
